@@ -29,6 +29,7 @@ boolean
 
 
 void lowerContainer();
+boolean signalCollect();
 void raiseContainer();
 void ledSignal();
 void triggerBreak(String val);
@@ -74,7 +75,8 @@ void loop()
   current = debounce(previous);
 
   // Perform the collection process if the switch is pressed
-  if (current == HIGH && previous == LOW)
+  boolean sC = signalCollect();
+  if (sC)
   {
     // Lower the container
     lowerContainer();
@@ -112,6 +114,26 @@ void lowerContainer()
   analogWrite(powerPin, fullPower);
 
   delay(tLower);
+}
+
+/**
+ * 
+ * Returns signal that indicates the start of collection.
+ * Several options available:
+ *  Option 1: 
+ *    Returns true when switchPin is activated (not present in final prototype)
+ *  Option 2:
+ *    Established connection to Pixhawk microcontroller, returns signal
+ *    from pilot
+ *  
+ */
+boolean signalCollect()
+{
+  // Option 1
+  return current == HIGH && previous == LOW;
+
+  // Option 2
+  
 }
 
 /**

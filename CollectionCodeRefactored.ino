@@ -6,7 +6,8 @@ int
          powerPin = 3,    // Powers motor
            ledPin = 6,    // Controls LED
         switchPin = 7,    // Detects switch state
-      pressurePin = 1;    // Pressure pin
+      pressurePin = 1,    // Pressure pin
+       pixhawkPin = 2;        // Detects drone signal
 
 // Times and Threshold
 
@@ -55,6 +56,7 @@ void setup()
   pinMode(switchPin, INPUT);
   pinMode(pressurePin, INPUT);
   pinMode(powerPin, INPUT);
+  pinMode(pixhawkPin, INPUT);
 
   /**
    * Connect to Serial port 9600 for debugging
@@ -67,12 +69,17 @@ void setup()
 void loop() 
 {
   fsrReading = analogRead(pressurePin);
+
+  int testValuePixHawk = analogRead(pixhawkPin);
+  delay(10);
+  Serial.println("Value = " + testValuePixHawk);
   
   // Keep the break on
   triggerBreak("ON");
     
   // Read the state of the switch
   current = debounce(previous);
+
 
   // Perform the collection process if the switch is pressed
   boolean sC = signalCollect();
@@ -130,9 +137,14 @@ void lowerContainer()
 boolean signalCollect()
 {
   // Option 1
-  return current == HIGH && previous == LOW;
+  // return current == HIGH && previous == LOW;
 
   // Option 2
+  // return digitalRead(pixhawkPin) == HIGH);
+
+  // Option 3
+   return analogRead(pixhawkPin) > 500;
+    
   
 }
 
